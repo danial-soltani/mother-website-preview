@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fa" dir="rtl" data-design="guided-cinematic-focus-v7-3-3">
+<html lang="fa" dir="rtl" data-design="guided-cinematic-focus-v7-3-4">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -492,11 +492,112 @@ html[dir='ltr'] .cinematic-hero-image{transform-origin:76% 39%}
   .ambient-backdrop-image{animation:none!important;transform:none!important;will-change:auto!important}
 }
 
+
+/* ================================================================
+  V7.3.4 RESTORED HERO — desktop only (>=921px)
+  - A distinct, sharp architectural Hero returns above the fixed ambience.
+  - Camera work happens in TWO NON-OVERLAPPING SCROLL PHASES:
+      0–730px Hero layer; 730–1500px fixed site wallpaper.
+    Never animate two large scene layers simultaneously.
+  - Native CSS timelines, no per-frame JS on supporting browsers.
+  - Mobile portrait / tablet / Feel Good rendering is untouched.
+  ================================================================ */
+@media (min-width:921px){
+  .heritage-glass-hero.ambient-hero{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    border-top:1px solid rgba(248,253,255,.48);
+    border-bottom:1px solid rgba(255,255,255,.65);
+    box-shadow:0 26px 65px rgba(23,68,99,.19),inset 0 1px rgba(255,255,255,.48);
+  }
+  /* Restore dedicated full-width Hero illustration; old V7.3.3 hid it.
+     No moving masks or filters; image is the original approved artwork. */
+  .heritage-glass-hero.ambient-hero>.cinematic-hero-image{
+    display:block!important;
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    opacity:1;
+    background-image:var(--site-art-rtl);
+    background-size:cover;
+    background-position:center center;
+    background-repeat:no-repeat;
+    filter:none!important;
+    -webkit-mask-image:none!important;
+    mask-image:none!important;
+    transform:none;
+    backface-visibility:hidden;
+    will-change:auto;
+  }
+  html[dir='ltr'] .heritage-glass-hero.ambient-hero>.cinematic-hero-image{
+    background-image:var(--site-art-ltr);
+  }
+  /* Clear focal architecture, gentle daylight on text side and lower seam. */
+  .heritage-glass-hero.ambient-hero::after{
+    content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background:
+      linear-gradient(90deg,rgba(218,235,245,.015) 0%,rgba(228,242,250,.03) 42%,rgba(240,248,252,.14) 100%),
+      linear-gradient(180deg,transparent 0%,transparent 72%,rgba(233,245,251,.12) 88%,rgba(236,246,252,.37) 100%);
+  }
+  html[dir='ltr'] .heritage-glass-hero.ambient-hero::after{
+    background:
+      linear-gradient(270deg,rgba(218,235,245,.015) 0%,rgba(228,242,250,.03) 42%,rgba(240,248,252,.14) 100%),
+      linear-gradient(180deg,transparent 0%,transparent 72%,rgba(233,245,251,.12) 88%,rgba(236,246,252,.37) 100%);
+  }
+  .ambient-hero .hero-grid{position:relative;z-index:1}
+  .ambient-hero .glass-hero-panel{
+    background:rgba(249,253,255,.46);
+    border:1px solid rgba(255,255,255,.88);
+    box-shadow:0 28px 75px rgba(23,59,88,.21),inset 0 1px rgba(255,255,255,.65);
+    backdrop-filter:blur(15px) saturate(1.15);
+    -webkit-backdrop-filter:blur(15px) saturate(1.15);
+  }
+}
+@keyframes focusHeroRestoredRtl{
+  0%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  50%{transform:translate3d(14px,5px,0) rotate(.13deg) scale(1.025)}
+  100%{transform:translate3d(30px,10px,0) rotate(.32deg) scale(1.054)}
+}
+@keyframes focusHeroRestoredLtr{
+  0%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  50%{transform:translate3d(-14px,5px,0) rotate(-.13deg) scale(1.025)}
+  100%{transform:translate3d(-30px,10px,0) rotate(-.32deg) scale(1.054)}
+}
+@supports (animation-timeline: scroll(root block)) and (animation-range:0px 1100px){
+  @media(min-width:921px){
+    /* Phase 1: only the Hero moves, while the fixed wallpaper stays still. */
+    html.cinematic-motion-on:has(.ambient-hero) .heritage-glass-hero.ambient-hero>.cinematic-hero-image{
+      animation-name:focusHeroRestoredRtl;
+      animation-duration:1s;
+      animation-timing-function:linear;
+      animation-fill-mode:both;
+      animation-timeline:scroll(root block);
+      animation-range:0px 730px;
+      will-change:transform;
+    }
+    html[dir='ltr'].cinematic-motion-on:has(.ambient-hero) .heritage-glass-hero.ambient-hero>.cinematic-hero-image{
+      animation-name:focusHeroRestoredLtr
+    }
+    /* Phase 2: once the Hero has scrolled away, move the fixed wallpaper.
+       The last frame of phase 1 is held; it is no longer being animated. */
+    html.cinematic-motion-on:has(.ambient-hero) .ambient-backdrop-image{
+      animation-range:730px 1500px;
+    }
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .heritage-glass-hero.ambient-hero>.cinematic-hero-image{
+    animation:none!important;transform:none!important;will-change:auto!important;
+  }
+}
+
 </style>
 </head>
 <body>
 <div class="ambient-backdrop" aria-hidden="true"><div class="ambient-backdrop-image"></div><div class="ambient-backdrop-veil"></div></div>
-<div class="preview-ribbon"><div class="container ribbon-inner"><span id="preview-label">پیش‌نمایش V7.3.3 — حرکت سینمایی موبایل و دسکتاپ؛ نام و لوگو هنوز انتخاب نشده‌اند</span><span class="ribbon-dot"></span><span id="preview-no-backend">فرم‌ها و داده‌ها آزمایشی هستند</span><button id="depth-motion-toggle" class="depth-motion-toggle" type="button" aria-pressed="true" title="فعال یا غیرفعال کردن حرکت سینمایی">✦ حرکت: روشن</button></div></div>
+<div class="preview-ribbon"><div class="container ribbon-inner"><span id="preview-label">پیش‌نمایش V7.3.4 — هیروی بازطراحی‌شده و حرکت سینمایی؛ نام و لوگو هنوز انتخاب نشده‌اند</span><span class="ribbon-dot"></span><span id="preview-no-backend">فرم‌ها و داده‌ها آزمایشی هستند</span><button id="depth-motion-toggle" class="depth-motion-toggle" type="button" aria-pressed="true" title="فعال یا غیرفعال کردن حرکت سینمایی">✦ حرکت: روشن</button></div></div>
 <header class="site-header" id="site-header">
  <div class="container header-inner">
    <a class="brand-placeholder" href="#/" aria-label="صفحه اصلی"><span class="brand-shape" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-text"><strong id="brand-name">نام برند</strong><small id="brand-tag">در انتظار هویت نهایی</small></span></a>
@@ -514,7 +615,7 @@ const BRAND_CONFIG = Object.freeze({name:{fa:'نام برند',en:'BRAND NAME'},
 const data = {
  fa:{
   nav:[['/','خانه'],['/services','راهکارها'],['/products','محصولات'],['/work','نمونه‌کارها'],['/feel-good','حال خوب'],['/about','درباره ما']],
-  ui:{preview:'پیش‌نمایش V7.3.3 — حرکت سینمایی موبایل و دسکتاپ؛ نام و لوگ هنوز انتخاب نشده‌اند',fake:'فرم‌ها و داده‌ها آزمایشی هستند',cta:'درخواست پروژه',more:'بیشتر ببینید',detail:'مشاهده معرفی',footerTitle:'آینده را محدود تعریف نمی‌کنیم.',footerCopy:'هویت نهایی این مجموعه هنوز انتخاب نشده است؛ سایت برای کسب‌وکارهای متنوع و محصولات مستقل طراحی می‌شود.',copyright:'© نمونه طراحی S3 — نام تجاری نهایی نشده',rules:'نسخه مفهومی؛ بدون لینک دانلود یا سفارش واقعی',
+  ui:{preview:'پیش‌نمایش V7.3.4 — هیروی بازطراحی‌شده و حرکت سینمایی؛ نام و لوگ هنوز انتخاب نشده‌اند',fake:'فرم‌ها و داده‌ها آزمایشی هستند',cta:'درخواست پروژه',more:'بیشتر ببینید',detail:'مشاهده معرفی',footerTitle:'آینده را محدود تعریف نمی‌کنیم.',footerCopy:'هویت نهایی این مجموعه هنوز انتخاب نشده است؛ سایت برای کسب‌وکارهای متنوع و محصولات مستقل طراحی می‌شود.',copyright:'© نمونه طراحی S3 — نام تجاری نهایی نشده',rules:'نسخه مفهومی؛ بدون لینک دانلود یا سفارش واقعی',
    home:'خانه',services:'راهکارها',products:'محصولات',work:'نمونه‌کارها',feel:'حال خوب',about:'درباره ما',contact:'تماس با ما',request:'ثبت سفارش',close:'بستن',back:'بازگشت',next:'ادامه',cancel:'انصراف', send:'ثبت نمایشی',noSubmit:'این نمونه فقط برای ارزیابی طراحی است؛ هیچ اطلاعاتی ارسال یا ذخیره نمی‌شود.'},
   hero:{label:'گروه چندصنعتی • محصولات و راهکارها',line1:'از یک ایده،',line2:'تا دنیایی',line3:'از امکان‌ها.',description:'از طراحی محصولات دیجیتال تا راهکارهای مهندسی، محصولات فیزیکی و پروژه‌های آینده؛ هر مسیر با یک مسئله واقعی شروع می‌شود.',cta1:'برای پروژه‌ام گفتگو کنیم',cta2:'کشف محصولات',points:['نگاه چندصنعتی','محصولات مستقل','زیرساخت قابل توسعه'],visual:'یک برند مادر، چند مسیر خلق ارزش',visualBottom:'CONCEPT / NOT FINAL BRAND'},
   paths:{label:'راهتان را انتخاب کنید',title:'برای هر مخاطب، یک مسیر روشن.',desc:'به جای نمایش همه چیز در یک صفحه، هر بازدیدکننده سریع به بخش موردنیاز خود می‌رسد.',items:[['◈','برای کسب‌وکارها','طراحی راهکار اختصاصی، توسعه نرم‌افزار و سیستم‌های مهندسی.','/services','بررسی راهکارها'],['◉','برای کاربران محصولات','محصولات دیجیتال و فیزیکی مجموعه را از یک مسیر مشخص دنبال کنید.','/products','مشاهده محصولات'],['✳','برای یک لحظه آرامش','اخبار خوب، مدیتیشن، تمرین تنفس و روایت‌های مثبت کاربران.','/feel-good','ورود به حال خوب']]},
