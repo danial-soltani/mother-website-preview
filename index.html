@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fa" dir="rtl" data-design="guided-cinematic-focus-v7-3-2">
+<html lang="fa" dir="rtl" data-design="guided-cinematic-focus-v7-3-3">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -356,7 +356,7 @@ html[dir='ltr'] .cinematic-hero-image{background-image:var(--site-art-ltr);trans
 :root{--focus-mobile-cover:rgba(245,251,254,.57)}
 .ambient-backdrop-image{
   /* Fixed wallpaper stays STILL: avoid two animated, full-screen filtered surfaces. */
-  transform:none!important;
+  transform:none;
   will-change:auto!important;
   filter:none;
 }
@@ -452,11 +452,51 @@ html[dir='ltr'] .cinematic-hero-image{transform-origin:76% 39%}
   .cinematic-hero-image{animation:none!important;transform:none!important;will-change:auto!important}
 }
 
+
+/* V7.3.3 — desktop-only global camera restoration.
+   The mobile native panorama is unchanged. A single fixed, unfiltered desktop
+   scene moves throughout scrolling, keeping the tech column visible even after
+   the Hero leaves the viewport. Never animate the duplicate Hero image. */
+@media (min-width:921px){
+  .cinematic-hero-image{display:none!important}
+  .ambient-backdrop-image{transform-origin:28% 42%;backface-visibility:hidden}
+  html[dir='ltr'] .ambient-backdrop-image{transform-origin:72% 42%}
+}
+@keyframes focusWallpaperDesktop{
+  0%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  45%{transform:translate3d(16px,4px,0) rotate(.19deg) scale(1.039)}
+  100%{transform:translate3d(42px,12px,0) rotate(.49deg) scale(1.090)}
+}
+@keyframes focusWallpaperDesktopLtr{
+  0%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  45%{transform:translate3d(-16px,4px,0) rotate(-.19deg) scale(1.039)}
+  100%{transform:translate3d(-42px,12px,0) rotate(-.49deg) scale(1.090)}
+}
+@supports (animation-timeline:scroll(root block)) and (animation-range:0px 1100px){
+  @media (min-width:921px){
+    html.cinematic-motion-on:has(.ambient-hero) .ambient-backdrop-image{
+      animation-name:focusWallpaperDesktop;
+      animation-timing-function:linear;
+      animation-duration:1s;
+      animation-fill-mode:both;
+      animation-timeline:scroll(root block);
+      animation-range:0px 1350px;
+      will-change:transform!important;
+    }
+    html[dir='ltr'].cinematic-motion-on:has(.ambient-hero) .ambient-backdrop-image{
+      animation-name:focusWallpaperDesktopLtr
+    }
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .ambient-backdrop-image{animation:none!important;transform:none!important;will-change:auto!important}
+}
+
 </style>
 </head>
 <body>
 <div class="ambient-backdrop" aria-hidden="true"><div class="ambient-backdrop-image"></div><div class="ambient-backdrop-veil"></div></div>
-<div class="preview-ribbon"><div class="container ribbon-inner"><span id="preview-label">پیش‌نمایش V7.3.2 — حرکت سینمایی روان؛ نام و لوگو هنوز انتخاب نشده‌اند</span><span class="ribbon-dot"></span><span id="preview-no-backend">فرم‌ها و داده‌ها آزمایشی هستند</span><button id="depth-motion-toggle" class="depth-motion-toggle" type="button" aria-pressed="true" title="فعال یا غیرفعال کردن حرکت سینمایی">✦ حرکت: روشن</button></div></div>
+<div class="preview-ribbon"><div class="container ribbon-inner"><span id="preview-label">پیش‌نمایش V7.3.3 — حرکت سینمایی موبایل و دسکتاپ؛ نام و لوگو هنوز انتخاب نشده‌اند</span><span class="ribbon-dot"></span><span id="preview-no-backend">فرم‌ها و داده‌ها آزمایشی هستند</span><button id="depth-motion-toggle" class="depth-motion-toggle" type="button" aria-pressed="true" title="فعال یا غیرفعال کردن حرکت سینمایی">✦ حرکت: روشن</button></div></div>
 <header class="site-header" id="site-header">
  <div class="container header-inner">
    <a class="brand-placeholder" href="#/" aria-label="صفحه اصلی"><span class="brand-shape" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-text"><strong id="brand-name">نام برند</strong><small id="brand-tag">در انتظار هویت نهایی</small></span></a>
@@ -474,7 +514,7 @@ const BRAND_CONFIG = Object.freeze({name:{fa:'نام برند',en:'BRAND NAME'},
 const data = {
  fa:{
   nav:[['/','خانه'],['/services','راهکارها'],['/products','محصولات'],['/work','نمونه‌کارها'],['/feel-good','حال خوب'],['/about','درباره ما']],
-  ui:{preview:'پیش‌نمایش V7.3.2 — حرکت سینمایی روان؛ نام و لوگ هنوز انتخاب نشده‌اند',fake:'فرم‌ها و داده‌ها آزمایشی هستند',cta:'درخواست پروژه',more:'بیشتر ببینید',detail:'مشاهده معرفی',footerTitle:'آینده را محدود تعریف نمی‌کنیم.',footerCopy:'هویت نهایی این مجموعه هنوز انتخاب نشده است؛ سایت برای کسب‌وکارهای متنوع و محصولات مستقل طراحی می‌شود.',copyright:'© نمونه طراحی S3 — نام تجاری نهایی نشده',rules:'نسخه مفهومی؛ بدون لینک دانلود یا سفارش واقعی',
+  ui:{preview:'پیش‌نمایش V7.3.3 — حرکت سینمایی موبایل و دسکتاپ؛ نام و لوگ هنوز انتخاب نشده‌اند',fake:'فرم‌ها و داده‌ها آزمایشی هستند',cta:'درخواست پروژه',more:'بیشتر ببینید',detail:'مشاهده معرفی',footerTitle:'آینده را محدود تعریف نمی‌کنیم.',footerCopy:'هویت نهایی این مجموعه هنوز انتخاب نشده است؛ سایت برای کسب‌وکارهای متنوع و محصولات مستقل طراحی می‌شود.',copyright:'© نمونه طراحی S3 — نام تجاری نهایی نشده',rules:'نسخه مفهومی؛ بدون لینک دانلود یا سفارش واقعی',
    home:'خانه',services:'راهکارها',products:'محصولات',work:'نمونه‌کارها',feel:'حال خوب',about:'درباره ما',contact:'تماس با ما',request:'ثبت سفارش',close:'بستن',back:'بازگشت',next:'ادامه',cancel:'انصراف', send:'ثبت نمایشی',noSubmit:'این نمونه فقط برای ارزیابی طراحی است؛ هیچ اطلاعاتی ارسال یا ذخیره نمی‌شود.'},
   hero:{label:'گروه چندصنعتی • محصولات و راهکارها',line1:'از یک ایده،',line2:'تا دنیایی',line3:'از امکان‌ها.',description:'از طراحی محصولات دیجیتال تا راهکارهای مهندسی، محصولات فیزیکی و پروژه‌های آینده؛ هر مسیر با یک مسئله واقعی شروع می‌شود.',cta1:'برای پروژه‌ام گفتگو کنیم',cta2:'کشف محصولات',points:['نگاه چندصنعتی','محصولات مستقل','زیرساخت قابل توسعه'],visual:'یک برند مادر، چند مسیر خلق ارزش',visualBottom:'CONCEPT / NOT FINAL BRAND'},
   paths:{label:'راهتان را انتخاب کنید',title:'برای هر مخاطب، یک مسیر روشن.',desc:'به جای نمایش همه چیز در یک صفحه، هر بازدیدکننده سریع به بخش موردنیاز خود می‌رسد.',items:[['◈','برای کسب‌وکارها','طراحی راهکار اختصاصی، توسعه نرم‌افزار و سیستم‌های مهندسی.','/services','بررسی راهکارها'],['◉','برای کاربران محصولات','محصولات دیجیتال و فیزیکی مجموعه را از یک مسیر مشخص دنبال کنید.','/products','مشاهده محصولات'],['✳','برای یک لحظه آرامش','اخبار خوب، مدیتیشن، تمرین تنفس و روایت‌های مثبت کاربران.','/feel-good','ورود به حال خوب']]},
@@ -568,33 +608,62 @@ app.addEventListener('submit',e=>{
 });
 render();
 
-/* V7.3.2 Native Scroll Timeline — compositor-owned, zero scroll-event DOM writes.
-   On browsers without native scroll timelines, still imagery is preferable to jank.
-   Full image, content, and bilingual routing remain as before. */
-(function () {
+/* V7.3.3 Guided Focus — native scroll timelines on supported browsers,
+   with a single-element desktop-only RAF fallback where unsupported.
+   Normal portrait-mobile animation remains exclusively native CSS. */
+(function(){
  'use strict';
  const root=document.documentElement;
  const toggle=document.getElementById('depth-motion-toggle');
- if(!toggle)return;
- const pref=matchMedia('(prefers-reduced-motion:reduce)');
- const supported=CSS.supports('animation-timeline: scroll(root block)') && CSS.supports('animation-range: 0px 1100px');
- let enabled=true;
+ const wallpaper=document.querySelector('.ambient-backdrop-image');
+ if(!toggle || !wallpaper)return;
+ const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+ const desktop=matchMedia('(min-width:921px)');
+ const supported=CSS.supports('animation-timeline: scroll(root block)') &&
+                 CSS.supports('animation-range: 0px 1100px');
+ let enabled=true,frame=0,lastTransform='';
  const route=()=> (location.hash||'#/').slice(1).split('?')[0]||'/';
+ const fallback=()=>!supported&&desktop.matches;
+ const allowed=()=>enabled&&!reduced.matches&&route()!=='/feel-good'&&(supported||fallback());
+ function stopFallback(){
+   if(frame){cancelAnimationFrame(frame);frame=0}
+   if(lastTransform){wallpaper.style.removeProperty('transform');lastTransform=''}
+ }
+ function drawFallback(){
+   frame=0;
+   if(!allowed()||!fallback()||route()!=='/'){stopFallback();return}
+   const value=Math.max(0,Math.min(1,(window.scrollY||0)/1350));
+   const t=value*value*(3-2*value);
+   const sign=root.dir==='rtl'?1:-1;
+   const transform='translate3d('+(sign*42*t).toFixed(2)+'px,'+
+      (12*t).toFixed(2)+'px,0) rotate('+(sign*.49*t).toFixed(3)+
+      'deg) scale('+(1+.09*t).toFixed(5)+')';
+   if(lastTransform!==transform){wallpaper.style.transform=transform;lastTransform=transform}
+ }
+ function requestFallback(){
+   if(!fallback())return;
+   if(!frame && !document.hidden)frame=requestAnimationFrame(drawFallback);
+ }
  function update(){
-  const feel=route()==='/feel-good';
-  const active=enabled&&supported&&!pref.matches&&!feel;
-  root.classList.toggle('cinematic-motion-on',active);
-  toggle.disabled=!supported||pref.matches||feel;
-  toggle.setAttribute('aria-pressed',String(active));
-  const fa=root.lang!=='en';
-  toggle.textContent=fa
-   ?!supported?'◌ حرکت: ثابت':pref.matches?'◌ حرکت: کاهش‌یافته':feel?'◌ حال خوب: ثابت':active?'✦ حرکت: روشن':'◌ حرکت: خاموش'
-   :!supported?'◌ Still image':pref.matches?'◌ Reduced motion':feel?'◌ Feel Good: still':active?'✦ Motion: on':'◌ Motion: off';
+   const feel=route()==='/feel-good';
+   const active=allowed();
+   root.classList.toggle('cinematic-motion-on',active);
+   toggle.disabled=reduced.matches||feel||(!supported&&!fallback());
+   toggle.setAttribute('aria-pressed',String(active));
+   const fa=root.lang!=='en';
+   toggle.textContent=fa
+     ?(!supported&&!fallback()?'◌ حرکت: ثابت':reduced.matches?'◌ حرکت: کاهش‌یافته':feel?'◌ حال خوب: ثابت':active?'✦ حرکت: روشن':'◌ حرکت: خاموش')
+     :(!supported&&!fallback()?'◌ Still image':reduced.matches?'◌ Reduced motion':feel?'◌ Feel Good: still':active?'✦ Motion: on':'◌ Motion: off');
+   if(!active||!fallback())stopFallback();else requestFallback();
  }
  toggle.addEventListener('click',()=>{enabled=!enabled;update()});
  addEventListener('hashchange',update);
+ addEventListener('resize',update,{passive:true});
+ addEventListener('scroll',requestFallback,{passive:true});
  document.getElementById('lang-toggle')?.addEventListener('click',update);
- if(pref.addEventListener)pref.addEventListener('change',update);
+ if(reduced.addEventListener)reduced.addEventListener('change',update);
+ if(desktop.addEventListener)desktop.addEventListener('change',update);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)requestFallback()});
  update();
 })();
 </script>
