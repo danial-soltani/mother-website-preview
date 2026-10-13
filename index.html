@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="fa" dir="rtl" data-design="cinematic-depth-v7-2">
+<html lang="fa" dir="rtl" data-design="guided-cinematic-focus-v7-3">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#eaf3f9" />
 <meta name="description" content="پیش‌نمایش تعاملی طراحی سایت مادر چندصنعتی — مرحله S3" />
-<title>Mother Website · Cinematic Depth V7.2</title>
+<title>Mother Website · Guided Cinematic Focus V7.3</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
 :root{--bg:#f8fafc;--paper:#fff;--ink:#1e3344;--ink2:#40566b;--muted:#64798b;--navy:#193b59;--blue:#477eaa;--blue-soft:#e9f3fa;--blue-muted:#d4e7f5;--mint:#d8eee3;--mint-strong:#568c79;--line:#dce6ed;--surface:#f2f6f9;--shadow:0 16px 45px rgba(25,55,80,.055);--radius:18px;--font:'Vazirmatn',Tahoma,sans-serif;--fg-bg:#f8f4fc;--fg-text:#443954;--fg-ink:#583e74;--fg-primary:#675080;--fg-line:#e4d7ee;--fg-soft:#eee5f6}
@@ -237,68 +237,83 @@ html[dir='ltr'] .heritage-glass-hero.ambient-hero::before{background-image:var(-
 @media(prefers-reduced-transparency:reduce){.ambient-hero .glass-hero-panel,.path-card,.service-card,.product-card,#app>.section>.container,#app>.page-hero>.container{background:rgba(252,254,255,.96)!important;backdrop-filter:none!important}}
 @supports not ((backdrop-filter:blur(4px)) or (-webkit-backdrop-filter:blur(4px))){.ambient-hero .glass-hero-panel,.path-card,.service-card,.product-card,#app>.section>.container,#app>.page-hero>.container{background:rgba(250,253,255,.94)!important}}
 
-/* ==========================================================================
-   CINEMATIC DEPTH SCROLL V7.2
-   Motion is an optional, scroll-linked UI layer; source images are untouched.
-   Image scale/translation only (no layout changes); RTL/LTR directions mirrored.
-   The mobile wallpaper uses a stable viewport height to avoid address-bar jump.
-   ========================================================================== */
+/* Guided Cinematic Focus · V7.3
+   Artwork remains intact; scroll changes only the presentation layers.
+   The panorama is intentionally cropped on portrait screens. */
 :root{
-  --depth-scale:1.025;
-  --depth-hero-scale:1;
-  --depth-shift-x:0px;
-  --depth-shift-y:0px;
-  --depth-hero-x:0px;
-  --depth-hero-y:0px;
+  --camera-global-scale:1.025;
+  --camera-hero-scale:1;
+  --camera-global-x:0px;
+  --camera-global-y:0px;
+  --camera-hero-x:0px;
+  --camera-hero-y:0px;
+  --camera-global-rotation:0deg;
+  --camera-hero-rotation:0deg;
+  --camera-mobile-x:80px;
+  --camera-mobile-hero-x:80px;
 }
-body>.ambient-backdrop{
-  height:100vh;
-  height:100svh;
-  bottom:auto;
-  overflow:hidden;
-  contain:paint;
-}
+body>.ambient-backdrop{height:100svh;bottom:auto;contain:paint;overflow:hidden}
 .ambient-backdrop-image{
-  transform:translate3d(var(--depth-shift-x),var(--depth-shift-y),0) scale(var(--depth-scale));
-  transform-origin:37% 50%;
-  backface-visibility:hidden;
-  will-change:transform;
+  transform:translate3d(var(--camera-global-x),var(--camera-global-y),0) rotate(var(--camera-global-rotation)) scale(var(--camera-global-scale));
+  transform-origin:24% 39%;backface-visibility:hidden;
 }
-html[dir='ltr'] .ambient-backdrop-image{transform-origin:63% 50%}
+html[dir='ltr'] .ambient-backdrop-image{transform-origin:76% 39%}
 .heritage-glass-hero.ambient-hero::before{
-  transform:translate3d(var(--depth-hero-x),var(--depth-hero-y),0) scale(var(--depth-hero-scale));
-  transform-origin:37% 50%;
-  backface-visibility:hidden;
-  will-change:transform;
+  transform:translate3d(var(--camera-hero-x),var(--camera-hero-y),0) rotate(var(--camera-hero-rotation)) scale(var(--camera-hero-scale));
+  transform-origin:24% 39%;backface-visibility:hidden;
 }
-html[dir='ltr'] .heritage-glass-hero.ambient-hero::before{transform-origin:63% 50%}
-.depth-motion-toggle{
-  appearance:none;border:1px solid rgba(46,99,130,.28);
-  color:#205374;background:rgba(255,255,255,.73);
-  border-radius:999px;font-size:.68rem;font-weight:750;
-  padding:3px 12px;line-height:1.5;cursor:pointer;white-space:nowrap;
+html[dir='ltr'] .heritage-glass-hero.ambient-hero::before{transform-origin:76% 39%}
+/* Mobile portrait is a deliberately panned wide image, NOT a full-image fit. */
+@media (orientation:portrait) and (max-width:630px){
+  .heritage-glass-hero.ambient-hero{padding:0 0 54px;overflow:hidden}
+  .ambient-hero .hero-grid{display:block;padding-top:clamp(300px,44svh,390px);min-height:0}
+  .ambient-hero .glass-hero-panel{width:100%;background:rgba(249,253,255,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  /* Oversized scene plane leaves a safety margin for long horizontal camera pans. */
+  .ambient-backdrop-image{
+    position:absolute;inset:auto;top:-2%;left:-65vw;
+    width:230vw;height:106%;
+    background-size:auto clamp(690px,95svh,900px);background-position:left top;
+    opacity:.99;filter:blur(2px) saturate(.97) contrast(1.035);
+    transform:translate3d(var(--camera-mobile-x),var(--camera-global-y),0) rotate(var(--camera-global-rotation)) scale(var(--camera-global-scale));
+    transform-origin:50% 42%;
+  }
+  html[dir='ltr'] .ambient-backdrop-image{background-position:right top}
+  .heritage-glass-hero.ambient-hero::before{
+    inset:auto;top:0;left:-65vw;width:230vw;height:100%;
+    background-size:auto clamp(690px,95svh,900px);background-position:left top;
+    opacity:.96;filter:blur(.6px) contrast(1.045);
+    transform:translate3d(var(--camera-mobile-hero-x),var(--camera-hero-y),0) rotate(var(--camera-hero-rotation)) scale(var(--camera-hero-scale));
+    transform-origin:50% 42%;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 70%,transparent 93%);
+    mask-image:linear-gradient(to bottom,#000 0%,#000 70%,transparent 93%);
+  }
+  html[dir='ltr'] .heritage-glass-hero.ambient-hero::before{background-position:right top}
+  .ambient-backdrop-veil{background:rgba(238,247,252,.075)}
 }
-.depth-motion-toggle:hover{background:#fff}
-.depth-motion-toggle[aria-pressed='false']{background:rgba(248,251,252,.7);color:#566d7c}
-.depth-motion-toggle:disabled{cursor:default;opacity:.65}
-.depth-motion-toggle:focus-visible{outline:2px solid #25618a;outline-offset:2px}
-@media(max-width:630px){
-  .depth-motion-toggle{font-size:.59rem;padding:2px 9px}
-  .ambient-backdrop-image{transform-origin:40% 50%}
-  html[dir='ltr'] .ambient-backdrop-image{transform-origin:60% 50%}
-  .heritage-glass-hero.ambient-hero::before{transform-origin:40% 50%}
-  html[dir='ltr'] .heritage-glass-hero.ambient-hero::before{transform-origin:60% 50%}
+/* Wide phones and desktop keep the full architectural composition where feasible. */
+@media (orientation:landscape) and (max-height:530px){
+  .ambient-backdrop-image{background-position:center center}
+  .heritage-glass-hero.ambient-hero::before{background-position:center center}
 }
 @media(prefers-reduced-motion:reduce){
-  .ambient-backdrop-image{transform:none!important;will-change:auto}
-  .heritage-glass-hero.ambient-hero::before{transform:none!important;will-change:auto}
+  .ambient-backdrop-image,.heritage-glass-hero.ambient-hero::before{transform:none!important;will-change:auto!important}
 }
+.depth-motion-toggle{
+  appearance:none;border:1px solid rgba(46,99,130,.28);color:#205374;
+  background:rgba(255,255,255,.80);border-radius:999px;
+  font-size:.68rem;font-weight:750;padding:3px 12px;line-height:1.5;
+  cursor:pointer;white-space:nowrap;
+}
+.depth-motion-toggle[aria-pressed='false']{color:#526d7c;background:rgba(248,251,252,.75)}
+.depth-motion-toggle:disabled{cursor:default;opacity:.68}
+.depth-motion-toggle:focus-visible{outline:2px solid #25618a;outline-offset:2px}
+@media(max-width:630px){.depth-motion-toggle{font-size:.60rem;padding:2px 8px}}
 
 </style>
 </head>
 <body>
 <div class="ambient-backdrop" aria-hidden="true"><div class="ambient-backdrop-image"></div><div class="ambient-backdrop-veil"></div></div>
-<div class="preview-ribbon"><div class="container ribbon-inner"><span id="preview-label">پیش‌نمایش حرکت سینمایی V7.2 — نام و لوگو هنوز انتخاب نشده‌اند</span><span class="ribbon-dot"></span><span id="preview-no-backend">فرم‌ها و داده‌ها آزمایشی هستند</span><button id="depth-motion-toggle" type="button" class="depth-motion-toggle" aria-pressed="true" title="روشن یا خاموش کردن حرکت هنگام اسکرول">✦ حرکت: روشن</button></div></div>
+<div class="preview-ribbon"><div class="container ribbon-inner"><span id="preview-label">پیش‌نمایش V7.3 — حرکت سینمایی هدایت‌شده؛ نام و لوگو هنوز انتخاب نشده‌اند</span><span class="ribbon-dot"></span><span id="preview-no-backend">فرم‌ها و داده‌ها آزمایشی هستند</span><button id="depth-motion-toggle" class="depth-motion-toggle" type="button" aria-pressed="true" title="فعال یا غیرفعال کردن حرکت سینمایی">✦ حرکت: روشن</button></div></div>
 <header class="site-header" id="site-header">
  <div class="container header-inner">
    <a class="brand-placeholder" href="#/" aria-label="صفحه اصلی"><span class="brand-shape" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-text"><strong id="brand-name">نام برند</strong><small id="brand-tag">در انتظار هویت نهایی</small></span></a>
@@ -316,7 +331,7 @@ const BRAND_CONFIG = Object.freeze({name:{fa:'نام برند',en:'BRAND NAME'},
 const data = {
  fa:{
   nav:[['/','خانه'],['/services','راهکارها'],['/products','محصولات'],['/work','نمونه‌کارها'],['/feel-good','حال خوب'],['/about','درباره ما']],
-  ui:{preview:'پیش‌نمایش حرکت سینمایی V7.2 — نام و لوگو هنوز انتخاب نشده‌اند',fake:'فرم‌ها و داده‌ها آزمایشی هستند',cta:'درخواست پروژه',more:'بیشتر ببینید',detail:'مشاهده معرفی',footerTitle:'آینده را محدود تعریف نمی‌کنیم.',footerCopy:'هویت نهایی این مجموعه هنوز انتخاب نشده است؛ سایت برای کسب‌وکارهای متنوع و محصولات مستقل طراحی می‌شود.',copyright:'© نمونه طراحی S3 — نام تجاری نهایی نشده',rules:'نسخه مفهومی؛ بدون لینک دانلود یا سفارش واقعی',
+  ui:{preview:'پیش‌نمایش V7.3 — حرکت سینمایی هدایت‌شده؛ نام و لوگو هنوز انتخاب نشده‌اند',fake:'فرم‌ها و داده‌ها آزمایشی هستند',cta:'درخواست پروژه',more:'بیشتر ببینید',detail:'مشاهده معرفی',footerTitle:'آینده را محدود تعریف نمی‌کنیم.',footerCopy:'هویت نهایی این مجموعه هنوز انتخاب نشده است؛ سایت برای کسب‌وکارهای متنوع و محصولات مستقل طراحی می‌شود.',copyright:'© نمونه طراحی S3 — نام تجاری نهایی نشده',rules:'نسخه مفهومی؛ بدون لینک دانلود یا سفارش واقعی',
    home:'خانه',services:'راهکارها',products:'محصولات',work:'نمونه‌کارها',feel:'حال خوب',about:'درباره ما',contact:'تماس با ما',request:'ثبت سفارش',close:'بستن',back:'بازگشت',next:'ادامه',cancel:'انصراف', send:'ثبت نمایشی',noSubmit:'این نمونه فقط برای ارزیابی طراحی است؛ هیچ اطلاعاتی ارسال یا ذخیره نمی‌شود.'},
   hero:{label:'گروه چندصنعتی • محصولات و راهکارها',line1:'از یک ایده،',line2:'تا دنیایی',line3:'از امکان‌ها.',description:'از طراحی محصولات دیجیتال تا راهکارهای مهندسی، محصولات فیزیکی و پروژه‌های آینده؛ هر مسیر با یک مسئله واقعی شروع می‌شود.',cta1:'برای پروژه‌ام گفتگو کنیم',cta2:'کشف محصولات',points:['نگاه چندصنعتی','محصولات مستقل','زیرساخت قابل توسعه'],visual:'یک برند مادر، چند مسیر خلق ارزش',visualBottom:'CONCEPT / NOT FINAL BRAND'},
   paths:{label:'راهتان را انتخاب کنید',title:'برای هر مخاطب، یک مسیر روشن.',desc:'به جای نمایش همه چیز در یک صفحه، هر بازدیدکننده سریع به بخش موردنیاز خود می‌رسد.',items:[['◈','برای کسب‌وکارها','طراحی راهکار اختصاصی، توسعه نرم‌افزار و سیستم‌های مهندسی.','/services','بررسی راهکارها'],['◉','برای کاربران محصولات','محصولات دیجیتال و فیزیکی مجموعه را از یک مسیر مشخص دنبال کنید.','/products','مشاهده محصولات'],['✳','برای یک لحظه آرامش','اخبار خوب، مدیتیشن، تمرین تنفس و روایت‌های مثبت کاربران.','/feel-good','ورود به حال خوب']]},
@@ -335,7 +350,7 @@ const data = {
  },
  en:{
   nav:[['/','Home'],['/services','Solutions'],['/products','Products'],['/work','Work'],['/feel-good','Feel Good'],['/about','About']],
-  ui:{preview:'V7.2 Cinematic Depth preview — brand name and logo pending',fake:'Forms and content are demonstrative',cta:'Start a Project',more:'Explore',detail:'View details',footerTitle:'The future is not one industry.',footerCopy:'Our brand identity is still being defined. The architecture is designed for independent products and multiple business areas.',copyright:'© S3 concept — brand to be decided',rules:'Prototype only; no live downloads or submissions',home:'Home',services:'Solutions',products:'Products',work:'Work',feel:'Feel Good',about:'About',contact:'Contact',request:'Project Request',close:'Close',back:'Back',next:'Continue',cancel:'Cancel',send:'Demo submission',noSubmit:'This is a UX prototype. Nothing will be sent or stored.'},
+  ui:{preview:'V7.3 Guided Cinematic Focus — brand name and logo pending',fake:'Forms and content are demonstrative',cta:'Start a Project',more:'Explore',detail:'View details',footerTitle:'The future is not one industry.',footerCopy:'Our brand identity is still being defined. The architecture is designed for independent products and multiple business areas.',copyright:'© S3 concept — brand to be decided',rules:'Prototype only; no live downloads or submissions',home:'Home',services:'Solutions',products:'Products',work:'Work',feel:'Feel Good',about:'About',contact:'Contact',request:'Project Request',close:'Close',back:'Back',next:'Continue',cancel:'Cancel',send:'Demo submission',noSubmit:'This is a UX prototype. Nothing will be sent or stored.'},
   hero:{label:'Multi-industry group • Products & solutions',line1:'From one idea,',line2:'to a world',line3:'of possibilities.',description:'From digital products to engineering solutions, physical goods and tomorrow’s ventures: every direction begins with a real problem.',cta1:'Let’s discuss your project',cta2:'Explore our products',points:['Multi-industry mindset','Independent products','Expandable foundation'],visual:'One parent brand, many ways to create value',visualBottom:'CONCEPT / NOT FINAL BRAND'},
   paths:{label:'Choose your path',title:'A clear route for every visitor.',desc:'Instead of cramming everything onto one page, visitors can reach what matters to them.',items:[['◈','For businesses','Custom software, process automation and engineering-led solutions.','/services','Explore solutions'],['◉','For product users','Find digital and physical products, with clear availability labels.','/products','View products'],['✳','For a little calm','Good news, meditation, breathing, and community stories.','/feel-good','Enter Feel Good']]},
   services:{label:'Our capabilities',title:'From problems to solutions.',desc:'We organize services around customer needs, not technology labels alone.',cards:[['01','Digital products','Custom applications and software products'],['02','AI & automation','Streamlined workflows and intelligent solutions'],['03','Connected systems','Integrating smart devices and services'],['04','Engineering solutions','Analysis, design and improvement of technical systems']],cta:'Have a problem worth solving?',ctasub:'Describe it to begin a practical conversation about scope and approach.'},
@@ -387,7 +402,7 @@ function breathe(){let f=t().feel;return `<div class="breathe-layout"><div class
 function community(){let f=t().feel;return `<div class="community-layout"><article class="community-info"><span class="eyebrow">COMMUNITY STORIES</span><h2>${f.communityTitle}</h2><p>${f.communityText}</p><div class="side-list">${f.communityPoints.map((x,i)=>`<div><b>✓</b><span>${x}</span></div>`).join('')}</div></article><form class="community-form" id="story-form"><div class="fields"><div class="field"><label for="display-name">${f.name} *</label><input id="display-name" required maxlength="48" placeholder="${f.nameP}"></div><div class="field"><label for="story-email">${f.privateEmail} *</label><input id="story-email" type="email" required placeholder="${f.privateEmailP}"></div><div class="field"><label for="story">${f.story} *</label><textarea id="story" required minlength="15" maxlength="1800" placeholder="${f.storyP}"></textarea></div><label class="checkbox-row"><input type="checkbox" id="story-consent" required><span>${f.consent}</span></label><p class="helper-note">${f.communityDisclaimer}</p><button class="btn btn-dark" type="submit">${f.storyDemo} ${arrow()}</button></div></form></div>`}
 function feelGood(){let f=t().feel;const pane=[news,relax,breathe,community][activeFeelTab]();return `<div class="fg-page"><div class="container"><div class="page-hero"><span class="eyebrow">${f.label}</span><h1>${f.title}</h1><p>${f.desc}</p></div><div class="fg-tabs" role="tablist" aria-label="${ui().feel}">${f.tabs.map((a,i)=>`<button type="button" role="tab" class="chip ${i===activeFeelTab?'active':''}" aria-selected="${activeFeelTab===i}" data-fg-tab="${i}">${a}</button>`).join('')}</div><div class="fg-panel" role="tabpanel">${pane}</div></div></div>`}
 function smallPage(which){let s=t().small;let p=which==='work'?[s.workLabel,s.workTitle,s.workDesc,s.workCard]:which==='about'?[s.aboutLabel,s.aboutTitle,s.aboutDesc,s.aboutCard]:['',s.contactTitle,s.contactDesc,s.legal];return `${head(p[0],p[1],p[2])}<section class="section mini-page" style="padding-top:5px"><div class="container"><div class="empty-cards">${p[3]}</div>${which==='about'?`<div class="about-heritage-note"><span class="about-heritage-line" aria-hidden="true"></span><div><span class="eyebrow">${language==='fa'?'نگاه به ریشه‌ها':'ROOTED IN CULTURE'}</span><h2>${language==='fa'?'اصالت در جزئیات، آینده در نگاه':'Rooted in heritage. Open to tomorrow.'}</h2><p>${language==='fa'?'زبان بصری این نمونه از هندسه منظم و نقش‌مایه‌های تاریخی ایران الهام می‌گیرد؛ نه به‌عنوان تزئین غالب، بلکه همچون امضایی آرام در طراحی.':'The visual language draws on the geometry of historic Iranian ornamentation as a restrained background signature, never as decorative spectacle.'}</p></div></div>`:''}<div style="margin-top:35px">${buttonLink('/request',ui().cta)}</div></div></section>`}
-function render(scroll=false){if(breathTimer){clearInterval(breathTimer);breathTimer=null;}route=(location.hash||'#/').replace(/^#/,'').split('?')[0];if(!['/','/services','/products','/request','/feel-good','/work','/about','/contact'].includes(route))route='/';let pages={'/':home,'/services':services,'/products':products,'/request':requestPage,'/feel-good':feelGood,'/work':()=>smallPage('work'),'/about':()=>smallPage('about'),'/contact':()=>smallPage('contact')};header();app.innerHTML=pages[route]();document.title=`${route==='/'?ui().home:route==='/request'?ui().request:route==='/feel-good'?ui().feel:route==='/services'?ui().services:route==='/products'?ui().products:route==='/work'?ui().work:ui().about} — V7.2 Cinematic Depth Preview`;if(scroll)window.scrollTo({top:0,behavior:'instant'});document.getElementById('mobile-menu').hidden=true;document.getElementById('menu-toggle').setAttribute('aria-expanded','false')}
+function render(scroll=false){if(breathTimer){clearInterval(breathTimer);breathTimer=null;}route=(location.hash||'#/').replace(/^#/,'').split('?')[0];if(!['/','/services','/products','/request','/feel-good','/work','/about','/contact'].includes(route))route='/';let pages={'/':home,'/services':services,'/products':products,'/request':requestPage,'/feel-good':feelGood,'/work':()=>smallPage('work'),'/about':()=>smallPage('about'),'/contact':()=>smallPage('contact')};header();app.innerHTML=pages[route]();document.title=`${route==='/'?ui().home:route==='/request'?ui().request:route==='/feel-good'?ui().feel:route==='/services'?ui().services:route==='/products'?ui().products:route==='/work'?ui().work:ui().about} — V7.3 Guided Cinematic Focus Preview`;if(scroll)window.scrollTo({top:0,behavior:'instant'});document.getElementById('mobile-menu').hidden=true;document.getElementById('menu-toggle').setAttribute('aria-expanded','false')}
 function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),4200)}
 function startBreathe(){const toggle=document.getElementById('breathe-toggle');if(!toggle)return;let f=t().feel;breathT=0;toggle.textContent=f.breatheStop;function beat(){const circle=document.getElementById('breath-circle'),label=document.getElementById('breath-label'),count=document.getElementById('breath-count');if(!circle)return;const phase=breathT%10;circle.classList.toggle('inhale',phase<4);label.textContent=phase<4?f.inhale:f.exhale;count.textContent=`00:${String(Math.max(0,60-breathT)).padStart(2,'0')}`;if(breathT++>=60)stopBreathe()};beat();breathTimer=setInterval(beat,1000)}
 function stopBreathe(){if(breathTimer){clearInterval(breathTimer);breathTimer=null;}const toggle=document.getElementById('breathe-toggle'),circle=document.getElementById('breath-circle'),label=document.getElementById('breath-label'),count=document.getElementById('breath-count');if(toggle)toggle.textContent=t().feel.breatheStart;if(circle)circle.classList.remove('inhale');if(label)label.textContent=t().feel.ready;if(count)count.textContent='01:00'}
@@ -409,60 +424,79 @@ app.addEventListener('submit',e=>{
 });
 render();
 
-/* V7.2 — scroll-responsive cinematic depth; localized to existing background layers.
-   No continuous autoplay, no motion in Feel Good, no scroll-layout recalculation.
-   A visible toggle lets reviewers compare still vs cinematic versions. */
-const depthPreference=window.matchMedia('(prefers-reduced-motion: reduce)');
-const depthToggle=document.getElementById('depth-motion-toggle');
-let depthEnabled=true,depthCurrent=0,depthFrame=0;
-function depthCanAnimate(){return depthEnabled&&!depthPreference.matches&&route!=='/feel-good'}
-function depthUpdateToggle(){
- const reduced=depthPreference.matches;
- const unavailable=route==='/feel-good';
- const active=depthCanAnimate();
- depthToggle.disabled=reduced||unavailable;
- depthToggle.setAttribute('aria-pressed',String(active));
- depthToggle.textContent=language==='fa'
-  ? (reduced?'◌ حرکت: کاهش‌یافته':unavailable?'◌ حال خوب: ثابت':active?'✦ حرکت: روشن':'◌ حرکت: خاموش')
-  : (reduced?'◌ Reduced motion':unavailable?'◌ Feel Good: still':active?'✦ Motion: on':'◌ Motion: off');
- depthToggle.title=language==='fa'?'مقایسه نسخه ثابت و متحرک در اسکرول':'Compare still and cinematic scrolling';
-}
-function depthPaint(){
- depthFrame=0;
- const root=document.documentElement;
- const on=depthCanAnimate();
- const mobile=window.matchMedia('(max-width: 630px)').matches;
- const home=route==='/';
- const y=on?Math.max(0,window.scrollY||root.scrollTop||0):0;
- /* Smooth saturation across the first portion of the page; fully reversible. */
- const target=on?1-Math.exp(-y/(home?(mobile?1050:1250):(mobile?1650:2100))):0;
- depthCurrent+= (target-depthCurrent)*.19;
- if(Math.abs(target-depthCurrent)<.0008)depthCurrent=target;
- const travel=depthCurrent;
- const base=1.025;
- const zoom=home?(mobile?.027:.043):(mobile?.012:.020);
- const heroZoom=home?(mobile?.017:.032):0;
- const dx=home?(mobile?3.4:11):(mobile?1.4:4.2);
- const dy=home?(mobile?-3.5:-11):(mobile?-1.2:-4.5);
- const dir=root.dir==='rtl'?1:-1;
- root.style.setProperty('--depth-scale',(base+zoom*travel).toFixed(5));
- root.style.setProperty('--depth-hero-scale',(1+heroZoom*travel).toFixed(5));
- root.style.setProperty('--depth-shift-x',(dir*dx*travel).toFixed(2)+'px');
- root.style.setProperty('--depth-shift-y',(dy*travel).toFixed(2)+'px');
- root.style.setProperty('--depth-hero-x',(dir*dx*.47*travel).toFixed(2)+'px');
- root.style.setProperty('--depth-hero-y',(dy*.47*travel).toFixed(2)+'px');
- if(Math.abs(target-depthCurrent)>.0008)depthRequestFrame();
-}
-function depthRequestFrame(){if(!depthFrame)depthFrame=window.requestAnimationFrame(depthPaint)}
-depthToggle.addEventListener('click',()=>{depthEnabled=!depthEnabled;depthUpdateToggle();depthRequestFrame()});
-window.addEventListener('scroll',depthRequestFrame,{passive:true});
-window.addEventListener('resize',depthRequestFrame,{passive:true});
-if(depthPreference.addEventListener)depthPreference.addEventListener('change',()=>{depthUpdateToggle();depthRequestFrame()});
-else if(depthPreference.addListener)depthPreference.addListener(()=>{depthUpdateToggle();depthRequestFrame()});
-window.addEventListener('hashchange',()=>{depthUpdateToggle();depthRequestFrame()});
-document.getElementById('lang-toggle').addEventListener('click',()=>{depthUpdateToggle();depthRequestFrame()});
-depthUpdateToggle();
-depthRequestFrame();
+/* V7.3 Guided Cinematic Focus: scroll-driven pan + scale + micro-rotation.
+   Animation is reversible, honours reduced-motion, and excludes Feel Good.
+   Image assets and glass UI remain unchanged. */
+(function () {
+  'use strict';
+  const doc = document.documentElement;
+  const mediaReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const portraitPhone = window.matchMedia('(orientation:portrait) and (max-width:630px)');
+  const toggle = document.getElementById('depth-motion-toggle');
+  if (!toggle) return;
+  const settings = Object.freeze({
+    homeDesktop:{zoom:.065,heroZoom:.092,driftX:-14,driftY:20,heroDriftX:-20,heroDriftY:26,rotation:.58,heroRotation:.72,travel:950},
+    innerDesktop:{zoom:.025,heroZoom:0,driftX:-7,driftY:9,heroDriftX:0,heroDriftY:0,rotation:.28,heroRotation:0,travel:1700},
+    homePortrait:{zoom:.024,heroZoom:.035,pan:215,heroPan:145,driftY:14,heroDriftY:9,rotation:.13,heroRotation:.20,travel:1450},
+    innerPortrait:{zoom:.012,heroZoom:0,pan:110,heroPan:0,driftY:6,heroDriftY:0,rotation:.08,heroRotation:0,travel:2100}
+  });
+  let enabled=true, current=0, frame=0;
+  const route=()=> (location.hash||'#/').slice(1).split('?')[0]||'/';
+  const useMotion=()=>enabled && !mediaReduce.matches && route()!=='/feel-good';
+  const css=(name,value)=>doc.style.setProperty(name,value);
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const px=(n)=>n.toFixed(2)+'px';
+  const deg=(n)=>n.toFixed(3)+'deg';
+  function updateToggle(){
+    const path=route(), offByRoute=path==='/feel-good';
+    const running=useMotion(), fa=doc.lang!=='en';
+    toggle.disabled=mediaReduce.matches||offByRoute;
+    toggle.setAttribute('aria-pressed',String(running));
+    toggle.textContent=fa
+      ?mediaReduce.matches?'◌ حرکت: کاهش‌یافته':offByRoute?'◌ حال خوب: ثابت':running?'✦ حرکت: روشن':'◌ حرکت: خاموش'
+      :mediaReduce.matches?'◌ Reduced motion':offByRoute?'◌ Feel Good: still':running?'✦ Motion: on':'◌ Motion: off';
+    toggle.title=fa?'نمایش ثابت یا حرکت سینمایی':'Compare still and cinematic scrolling';
+  }
+  function draw(){
+    frame=0;
+    const home=route()==='/', phone=portraitPhone.matches;
+    const dir=doc.dir==='rtl'?1:-1;
+    const cfg=phone?(home?settings.homePortrait:settings.innerPortrait):(home?settings.homeDesktop:settings.innerDesktop);
+    const y=useMotion()?Math.max(0,scrollY||0):0;
+    const raw=Math.min(1,y/cfg.travel);
+    const target=useMotion()?raw*raw*(3-2*raw):0;
+    current=lerp(current,target,.24);
+    if(Math.abs(target-current)<.0007)current=target;
+    const t=current;
+    css('--camera-global-scale',(1.025+cfg.zoom*t).toFixed(5));
+    css('--camera-hero-scale',(1+cfg.heroZoom*t).toFixed(5));
+    css('--camera-global-x',px(dir*cfg.driftX*t||0));
+    css('--camera-hero-x',px(dir*cfg.heroDriftX*t||0));
+    css('--camera-global-y',px(cfg.driftY*t));
+    css('--camera-hero-y',px(cfg.heroDriftY*t));
+    css('--camera-global-rotation',deg(dir*cfg.rotation*t));
+    css('--camera-hero-rotation',deg(dir*cfg.heroRotation*t));
+    if(phone){
+      // Column appears near center of the first scenic frame. Further scroll
+      // progressively reveals the valley, with the column staying visible early.
+      const panorama=t<=.56 ? lerp(80,-20,t/.56) : lerp(-20,-135,(t-.56)/.44);
+      const heroPan=lerp(80,-65,t);
+      css('--camera-mobile-x',px(dir*panorama));
+      css('--camera-mobile-hero-x',px(dir*heroPan));
+    }
+    if(Math.abs(target-current)>.0007)request();
+  }
+  function request(){if(!frame)frame=requestAnimationFrame(draw)}
+  toggle.addEventListener('click',()=>{enabled=!enabled;updateToggle();request()});
+  addEventListener('scroll',request,{passive:true});
+  addEventListener('resize',request,{passive:true});
+  addEventListener('orientationchange',request,{passive:true});
+  addEventListener('hashchange',()=>{current=0;updateToggle();request()});
+  document.getElementById('lang-toggle')?.addEventListener('click',()=>{updateToggle();request()});
+  if(mediaReduce.addEventListener) mediaReduce.addEventListener('change',()=>{updateToggle();request()});
+  if(portraitPhone.addEventListener) portraitPhone.addEventListener('change',request);
+  updateToggle();request();
+})();
 
 </script>
 </body>
