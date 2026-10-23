@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+# Prelaunch: remove disallow at custom-domain activation.
